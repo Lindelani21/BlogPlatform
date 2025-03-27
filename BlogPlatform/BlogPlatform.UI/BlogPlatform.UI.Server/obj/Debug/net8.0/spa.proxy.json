@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:1943",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "C:\\Users\\linde\\Desktop\\Blog\\BlogPlatform\\BlogPlatform.UI\\BlogPlatform.UI.Server\\..\\blogplatform.ui.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}
