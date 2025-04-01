@@ -7,24 +7,23 @@ using System.Reflection.Emit;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogPlatform.Infrastructure.Data
 {
-    public class BlogContext : DbContext
+    public class BlogContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public BlogContext(DbContextOptions<BlogContext> options) : base(options) { }
 
-        public DbSet<BlogPost> Posts { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Like> Likes { get; set; }
-        public DbSet<Tag> Tags { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<User> Users { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<BlogPost> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // Simple configuration
             builder.Entity<BlogPost>()
-                .HasMany(p => p.Comments)
-                .WithOne(c => c.BlogPost);
+                .HasOne(p => p.Author)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId);
         }
     }
 }
