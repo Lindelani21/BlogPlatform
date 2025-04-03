@@ -1,5 +1,6 @@
 ﻿using BlogPlatform.Core.Models;
 using BlogPlatform.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlogPlatform.Infrastructure.Repositories
 {
-
+    // BlogPostRepository.cs
     public class BlogPostRepository
     {
         private readonly BlogContext _context;
