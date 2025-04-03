@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using BlogPlatform;
+using BlogPlatform.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

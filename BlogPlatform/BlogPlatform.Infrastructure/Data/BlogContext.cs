@@ -1,29 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using BlogPlatform.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogPlatform.Infrastructure.Data
 {
-    public class BlogContext : Microsoft.EntityFrameworkCore.DbContext
+    public class BlogContext : DbContext
     {
         public BlogContext(DbContextOptions<BlogContext> options) : base(options) { }
 
-        public Microsoft.EntityFrameworkCore.DbSet<User> Users { get; set; }
-        public Microsoft.EntityFrameworkCore.DbSet<BlogPost> Posts { get; set; }
+        public DbSet<BlogPost> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // Simple configuration
             builder.Entity<BlogPost>()
-                .HasOne(p => p.Author)
-                .WithMany(u => u.Posts)
-                .HasForeignKey(p => p.UserId);
+                .HasMany(p => p.Comments)
+                .WithOne(c => c.BlogPost);
         }
     }
 }
