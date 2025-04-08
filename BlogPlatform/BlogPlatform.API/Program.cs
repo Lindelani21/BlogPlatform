@@ -1,13 +1,40 @@
 using Microsoft.AspNetCore.Identity;
-using BlogPlatform;
 using BlogPlatform.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using BlogPlatform.API.Services;
+using BlogPlatform.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<BlogContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services.AddScoped<AuthService>();
+
+// Add to appsettings.json
+builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true);
+
 // Add services to the container
-builder.Services.AddDbContext<BlogContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<BlogContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
