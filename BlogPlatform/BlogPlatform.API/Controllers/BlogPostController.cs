@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BlogPlatform.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BlogPlatform.API.Controllers
 {
-    // Controllers/BlogPostsController.cs
+    //Controllers/BlogPostsController.cs
     //[ApiController]
     //[Route("api/[controller]")]
     //[Authorize]
