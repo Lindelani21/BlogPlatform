@@ -1,14 +1,12 @@
 ﻿using BlogPlatform.Core.Models;
-using Docker.DotNet.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BlogPlatform.Core;
-using BlogPlatform.Core.Dtos;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using AuthResponse = BlogPlatform.Core.Dtos.AuthResponse;
+using AuthRequest = BlogPlatform.Core.Dtos.AuthRequest;
 
 namespace BlogPlatform.API.Services;
 
@@ -23,7 +21,7 @@ public class AuthService
         _configuration = configuration;
     }
 
-    public async Task<AuthResponse> RegisterAsync(AuthRequest request, string displayName)
+    public async Task<AuthResponse> Register(AuthRequest request, string displayName)
     {
         // Check if user already exists
         var existingUser = await _userManager.FindByEmailAsync(request.Email);
@@ -50,7 +48,7 @@ public class AuthService
         return GenerateJwtToken(newUser);
     }
 
-    public async Task<AuthResponse> LoginAsync(AuthRequest request)
+    public async Task<AuthResponse> Login(AuthRequest request)
     {
         // Find user by email
         var user = await _userManager.FindByEmailAsync(request.Email);
@@ -77,7 +75,7 @@ public class AuthService
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("displayName", user.DisplayName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -96,5 +94,15 @@ public class AuthService
             Email: user.Email,
             DisplayName: user.DisplayName
         );
+    }
+
+    internal ActionResult<AuthResponse> RegisterAsync(Core.Dtos.AuthRequest request, string displayName)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal ActionResult<AuthResponse> LoginAsync(Core.Dtos.AuthRequest request)
+    {
+        throw new NotImplementedException();
     }
 }

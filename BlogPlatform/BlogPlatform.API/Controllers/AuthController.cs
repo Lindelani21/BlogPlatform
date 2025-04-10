@@ -1,6 +1,7 @@
 ﻿using BlogPlatform.API.Services;
-using Docker.DotNet.Models;
 using Microsoft.AspNetCore.Mvc;
+using BlogPlatform.Core.Dtos;
+using AuthResponse = BlogPlatform.Core.Dtos.AuthResponse;
 
 namespace BlogPlatform.API.Controllers;
 
@@ -22,7 +23,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            return await _authService.RegisterAsync(request, displayName);
+            return _authService.RegisterAsync(request, displayName);
         }
         catch (Exception ex)
         {
@@ -35,7 +36,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            return await _authService.LoginAsync(request);
+            return _authService.LoginAsync(request);
         }
         catch (Exception ex)
         {
