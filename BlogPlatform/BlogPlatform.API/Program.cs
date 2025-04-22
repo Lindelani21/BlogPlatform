@@ -63,6 +63,10 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
+builder.Services.AddScoped<CommentRepository>();
+
 builder.Services.AddScoped<PostRepository>();
+
+builder.Services.AddScoped<LikeRepository>();
 
 app.Run();
