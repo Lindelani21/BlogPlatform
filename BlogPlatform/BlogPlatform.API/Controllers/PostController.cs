@@ -1,39 +1,78 @@
-﻿using BlogPlatform.Core.Models;
+﻿using BlogPlatform.Core.Dtos;
+using BlogPlatform.Core.Models;
 using BlogPlatform.Infrastructure.Data;
+using BlogPlatform.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+
 
 namespace BlogPlatform.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class PostsController : ControllerBase
 {
     private readonly BlogContext _context;
+    private readonly PostRepository _postRepo;
+    private readonly ILogger<PostsController> _logger;
 
-    public PostsController(BlogContext context)
+    public PostsController(PostRepository postRepo, ILogger<PostsController> logger)
     {
-        _context = context;
+        _postRepo = postRepo;
+        _logger = logger;
     }
 
+    [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<List<BlogPost>>> GetPosts()
+    public async Task<IActionResult> GetAll()
     {
-        return await _context.Posts
-            .Include(p => p.Author)
-            .ToListAsync();
+        try
+        {
+            var posts = await _postRepo.GetAllAsync();
+            return Ok(posts);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting all posts");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        try
+        {
+            var post = await _postRepo.GetByIdAsync(id);
+            return post == null ? NotFound() : Ok(post);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error getting post {id}");
+            return StatusCode(500, "Internal server error");
+        }
     }
 
     [HttpPost]
-    public async Task<ActionResult<BlogPost>> CreatePost(BlogPost post)
+    public async Task<IActionResult> Create([FromBody] CreatePostDto postDto)
     {
-        
-        post.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        _context.Posts.Add(post);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetPosts), post);
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var post = await _postRepo.CreateAsync(postDto, userId);
+            return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating post");
+            return BadRequest("Error creating post");
+        }
     }
 
-
 }
+
+
+
