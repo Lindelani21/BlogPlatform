@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlogPlatform.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace BlogPlatform.Core.Models
     {
         public int Id { get; set; }
         public int BlogPostId { get; set; }
-      //  public BlogPost BlogPost { get; set; }
+        public BlogPost BlogPost { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
     }
