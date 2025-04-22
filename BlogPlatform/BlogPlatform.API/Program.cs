@@ -6,6 +6,7 @@ using BlogPlatform.Core.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BlogPlatform.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,5 +62,7 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<BlogContext>();
     db.Database.EnsureCreated();
 }
+
+builder.Services.AddScoped<PostRepository>();
 
 app.Run();
