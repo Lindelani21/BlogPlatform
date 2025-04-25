@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import * as React from 'react';
 
 function App() {
     const [forecasts, setForecasts] = useState();
@@ -20,14 +21,7 @@ function App() {
                 </tr>
             </thead>
             <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
+                
             </tbody>
         </table>;
 
