@@ -17,6 +17,7 @@ function App() {
                     <th>Date</th>
                     <th>Temp. (C)</th>
                     <th>Temp. (F)</th>
+                    <th>Must delete</th>
                     <th>Summary</th>
                 </tr>
             </thead>
