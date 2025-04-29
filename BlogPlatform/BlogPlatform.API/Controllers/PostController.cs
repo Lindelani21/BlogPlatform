@@ -5,6 +5,7 @@ using BlogPlatform.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 
 namespace BlogPlatform.API.Controllers;
@@ -22,6 +23,7 @@ public class PostsController : ControllerBase
     {
         _postRepo = postRepo;
         _logger = logger;
+        
     }
 
     [AllowAnonymous]
@@ -70,6 +72,25 @@ public class PostsController : ControllerBase
             _logger.LogError(ex, "Error creating post");
             return BadRequest("Error creating post");
         }
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetPaginated(
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
+    {
+        var (posts, totalCount) = await _postRepo.GetPaginatedAsync(page, pageSize);
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(new
+        {
+            TotalCount = totalCount,
+            PageSize = pageSize,
+            CurrentPage = page,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+        }));
+
+        return Ok(posts);
     }
 
 }
