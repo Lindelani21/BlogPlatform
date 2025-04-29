@@ -72,5 +72,29 @@ namespace BlogPlatform.Infrastructure.Repositories
 
             return await GetByIdAsync(post.Id);
         }
+
+        public async Task<(List<PostResponseDto> Items, int TotalCount)> GetPaginatedAsync(int pageNumber, int pageSize)
+        {
+            var query = _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Tags)
+                .OrderByDescending(p => p.CreatedAt);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new PostResponseDto(
+                    p.Id,
+                    p.Title,
+                    p.Content,
+                    p.CreatedAt,
+                    p.Author.DisplayName,
+                    p.Tags.Select(t => t.Name).ToList()))
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }
