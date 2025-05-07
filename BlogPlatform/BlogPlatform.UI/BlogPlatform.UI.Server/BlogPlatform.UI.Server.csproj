@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BlogPlatform.API\BlogPlatform.API.csproj" />
     <ProjectReference Include="..\blogplatform.ui.client\blogplatform.ui.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
