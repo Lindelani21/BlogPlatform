@@ -8,7 +8,7 @@ namespace BlogPlatform.Core.Models
 {
     public class AuthRequest
     {
-        public readonly string Email;
+        public readonly string? Email;
 
         public required string Username { get; set; }
         public required string Password { get; set; }
