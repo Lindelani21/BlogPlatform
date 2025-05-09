@@ -22,9 +22,9 @@ public class CommentRepository
             .Include(c => c.Author)
             .OrderByDescending(c => c.CreatedAt)
             .Select(c => new CommentResponseDto(
-                c.Id,
+                (int)c.Id,
                 c.Content,
-                c.CreatedAt,
+                (DateTime)c.CreatedAt,
                 c.Author.DisplayName))
             .ToListAsync();
     }
@@ -45,9 +45,9 @@ public class CommentRepository
             .Where(c => c.Id == comment.Id)
             .Include(c => c.Author)
             .Select(c => new CommentResponseDto(
-                c.Id,
+                (int)c.Id,
                 c.Content,
-                c.CreatedAt,
+                (DateTime)c.CreatedAt,
                 c.Author.DisplayName))
             .FirstAsync();
     }
