@@ -25,10 +25,10 @@ namespace BlogPlatform.Infrastructure.Repositories
                 .Include(p => p.Author)
                 .Include(p => p.Tags)
                 .Select(p => new PostResponseDto(
-                    p.Id,
+                    (int)p.Id,
                     p.Title,
                     p.Content,
-                    p.CreatedAt,
+                    (DateTime)p.CreatedAt,
                     p.Author.DisplayName,
                     p.Tags.Select(t => t.Name).ToList()))
                 .ToListAsync();
@@ -41,10 +41,10 @@ namespace BlogPlatform.Infrastructure.Repositories
                 .Include(p => p.Author)
                 .Include(p => p.Tags)
                 .Select(p => new PostResponseDto(
-                    p.Id,
+                    (int)p.Id,
                     p.Title,
                     p.Content,
-                    p.CreatedAt,
+                    (DateTime)p.CreatedAt,
                     p.Author.DisplayName,
                     p.Tags.Select(t => t.Name).ToList()))
                 .FirstOrDefaultAsync();
@@ -70,7 +70,7 @@ namespace BlogPlatform.Infrastructure.Repositories
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            return await GetByIdAsync(post.Id);
+            return await GetByIdAsync((int)post.Id);
         }
 
         public async Task<(List<PostResponseDto> Items, int TotalCount)> GetPaginatedAsync(int pageNumber, int pageSize)
@@ -86,10 +86,10 @@ namespace BlogPlatform.Infrastructure.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => new PostResponseDto(
-                    p.Id,
+                    (int)p.Id,
                     p.Title,
                     p.Content,
-                    p.CreatedAt,
+                    (DateTime)p.CreatedAt,
                     p.Author.DisplayName,
                     p.Tags.Select(t => t.Name).ToList()))
                 .ToListAsync();
